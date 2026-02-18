@@ -75,20 +75,15 @@ WSGI_APPLICATION = 'auth_service.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-try:
-    socket.gethostbyname('db')
-    DB_HOST = 'db'
-except socket.gaierror:
-    DB_HOST = 'localhost'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'auth_service',
-        'USER': 'auth_user',
-        'PASSWORD': 'auth_pass',
-        'HOST': DB_HOST,
-        'PORT': '3306',
+        'NAME': os.environ.get('DATABASE_NAME', 'auth_service'),
+        'USER': os.environ.get('DATABASE_USER', 'auth_user'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'auth_pass'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', '3306'),
     }
 }
 
@@ -145,4 +140,5 @@ SIMPLE_JWT = {
 }
 
 
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 

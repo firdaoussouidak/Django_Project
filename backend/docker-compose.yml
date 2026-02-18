@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - post-service
+    environment:
+      - DJANGO_SETTINGS_MODULE=gateway.settings
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - POST_SERVICE_URL=http://post-service:8000
+    networks:  # ← AJOUTER
+      - microservices-network
+    command: >
+      sh -c "sleep 10 &&
+             python manage.py migrate &&
+             gunicorn gateway.wsgi:application --bind 0.0.0.0:8000"
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "8001:8000"
+    depends_on:
+      - auth-db
+    environment:
+      - SECRET_KEY=ma-super-cle-secrete-partagee-entre-services
+      - DJANGO_SETTINGS_MODULE=auth_service.settings
+      - DATABASE_HOST=auth-db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=auth_service
+      - DATABASE_USER=auth_user
+      - DATABASE_PASSWORD=auth_pass
+      - ALLOWED_HOSTS=auth-service,localhost,127.0.0.1,api-gateway
+    networks:  # ← AJOUTER
+      - microservices-network
+    command: >
+      sh -c "sleep 15 &&
+             python manage.py migrate &&
+             gunicorn auth_service.wsgi:application --bind 0.0.0.0:8000"
+
+  auth-db:
+    image: mysql:8
+    container_name: auth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: auth_service
+      MYSQL_USER: auth_user
+      MYSQL_PASSWORD: auth_pass
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - auth_mysql_data:/var/lib/mysql
+    networks:  # ← AJOUTER
+      - microservices-network
+
+  post-service:
+    build: ./post-service
+    container_name: post-service
+    ports:
+      - "8002:8000"
+    depends_on:
+      - post-db
+    environment:
+      - SECRET_KEY=ma-super-cle-secrete-partagee-entre-services
+      - DJANGO_SETTINGS_MODULE=post_service.settings
+      - DATABASE_HOST=post-db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=post_service
+      - DATABASE_USER=post_user
+      - DATABASE_PASSWORD=post_pass
+      - ALLOWED_HOSTS=post-service,localhost,127.0.0.1,api-gateway
+    networks:  # ← AJOUTER
+      - microservices-network
+    command: >
+      sh -c "sleep 15 &&
+             python manage.py migrate &&
+             gunicorn post_service.wsgi:application --bind 0.0.0.0:8000"
+
+  post-db:
+    image: mysql:8
+    container_name: post-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: post_service
+      MYSQL_USER: post_user
+      MYSQL_PASSWORD: post_pass
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    volumes:
+      - post_mysql_data:/var/lib/mysql
+    networks:  # ← AJOUTER
+      - microservices-network
+
+networks:  # ← AJOUTER
+  microservices-network:
+    driver: bridge
+
+volumes:
+  auth_mysql_data:
+  post_mysql_data:

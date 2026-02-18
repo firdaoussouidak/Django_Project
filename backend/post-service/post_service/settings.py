@@ -76,20 +76,15 @@ WSGI_APPLICATION = 'post_service.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-try:
-    socket.gethostbyname('db')
-    DB_HOST = 'db'
-except socket.gaierror:
-    DB_HOST = 'localhost'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'post_service',
-        'USER': 'post_user',
-        'PASSWORD': 'post_pass',
-        'HOST': 'db',
-        'PORT': '3306',
+        'NAME': os.environ.get('DATABASE_NAME', 'post_service'),
+        'USER': os.environ.get('DATABASE_USER', 'post_user'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'post_pass'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', '3306'),
     }
 }
 
@@ -147,4 +142,7 @@ SIMPLE_JWT = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 

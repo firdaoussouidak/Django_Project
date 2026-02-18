@@ -1,0 +1,343 @@
+/* ══════════════════════════════════════════════
+   SIGNUP COMPONENT — Bordeaux Luxury Theme
+══════════════════════════════════════════════ */
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--cream, #f5f0e8);
+  font-family: 'Raleway', sans-serif;
+}
+
+/* ── Full-page layout ── */
+.page-wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ── Form panel (left for signup — mirrored) ── */
+.form-panel {
+  flex: 1;
+  background: #faf7f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* ── Decorative right panel ── */
+.deco-panel {
+  flex: 0 0 38%;
+  background: var(--accent, #5c1a1a);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+}
+
+.deco-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(200, 168, 130, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(92, 26, 26, 0.6) 0%, transparent 50%);
+}
+
+.deco-border {
+  position: absolute;
+  inset: 20px;
+  border: 1px solid rgba(200, 168, 130, 0.3);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.deco-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.brand-mark {
+  font-size: 1.6rem;
+  color: rgba(200, 168, 130, 0.5);
+  letter-spacing: 0.4em;
+  margin-bottom: 28px;
+  display: block;
+}
+
+.deco-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #f5f0e8;
+  line-height: 1.25;
+  margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+
+.deco-title em {
+  font-style: italic;
+  color: #d4b896;
+}
+
+.deco-rule {
+  width: 44px;
+  height: 1.5px;
+  background: rgba(200, 168, 130, 0.5);
+  margin: 0 auto 18px;
+}
+
+.deco-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(212, 184, 150, 0.7);
+}
+
+.deco-steps {
+  position: relative;
+  z-index: 1;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 220px;
+}
+
+.deco-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 168, 130, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.7rem;
+  color: #d4b896;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(212, 184, 150, 0.65);
+}
+
+.deco-ornament {
+  position: absolute;
+  font-family: 'Playfair Display', serif;
+  font-size: 12rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.03);
+  line-height: 1;
+  bottom: -20px;
+  left: -10px;
+  pointer-events: none;
+  letter-spacing: -0.05em;
+}
+
+/* ── Form ── */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent, #5c1a1a);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.form-eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8a7a62;
+  margin-bottom: 32px;
+  display: block;
+}
+
+/* ── Two-column row for first/last name ── */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+/* ── Input field ── */
+.input-field {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.input-field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #c8bba4;
+  padding: 14px 0 10px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.9rem;
+  color: #2a2016;
+  outline: none;
+  transition: border-color 0.25s;
+}
+
+.input-field input:focus {
+  border-bottom-color: var(--accent, #5c1a1a);
+}
+
+.input-field label {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7a62;
+  pointer-events: none;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-field input:focus ~ label,
+.input-field input.active ~ label,
+.input-field input:not(:placeholder-shown) ~ label {
+  top: -8px;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--accent, #5c1a1a);
+}
+
+/* Focus underline animation */
+.input-field::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent, #5c1a1a);
+  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-field:focus-within::after {
+  width: 100%;
+}
+
+/* ── Submit button ── */
+button[type="submit"] {
+  width: 100%;
+  background: var(--accent, #5c1a1a);
+  color: #faf7f2;
+  border: none;
+  padding: 15px 24px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  margin-top: 6px;
+  margin-bottom: 28px;
+}
+
+button[type="submit"]:hover {
+  background: #7a2e2e;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(92, 26, 26, 0.25);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* ── Login link ── */
+.login-link {
+  text-align: center;
+  padding-top: 4px;
+}
+
+.login-link p {
+  font-size: 0.7rem;
+  color: #8a7a62;
+  letter-spacing: 0.06em;
+}
+
+.login-link a {
+  color: var(--accent, #5c1a1a);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.login-link a:hover {
+  border-bottom-color: var(--accent, #5c1a1a);
+}
+
+/* ── Error messages ── */
+.error-message {
+  margin-top: 4px;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9e4a2c;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .page-wrapper {
+    flex-direction: column-reverse;
+  }
+
+  .deco-panel {
+    flex: 0 0 auto;
+    min-height: 200px;
+    padding: 32px 28px;
+  }
+
+  .deco-steps {
+    display: none;
+  }
+
+  .deco-title {
+    font-size: 1.7rem;
+  }
+
+  .form-panel {
+    padding: 36px 24px;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

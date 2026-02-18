@@ -1,0 +1,125 @@
+<div class="page-wrapper">
+
+  <div class="form-panel">
+    <div class="wrapper">
+      <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+
+        <h2>S'inscrire</h2>
+        <span class="form-eyebrow">Rejoignez Studio Post</span>
+
+        <div class="input-field">
+          <input
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            #usernameInput="ngModel"
+            required
+            placeholder=" "
+            [class.active]="username"
+          />
+          <label [class.active]="username">Nom d'utilisateur</label>
+          <div class="error-message" *ngIf="usernameInput.invalid && usernameInput.touched">
+            <span *ngIf="usernameInput.errors?.['required']">Champ requis</span>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-field">
+            <input
+              type="text"
+              [(ngModel)]="first_name"
+              name="first_name"
+              #firstNameInput="ngModel"
+              required
+              placeholder=" "
+              [class.active]="first_name"
+            />
+            <label [class.active]="first_name">Prénom</label>
+          </div>
+
+          <div class="input-field">
+            <input
+              type="text"
+              [(ngModel)]="last_name"
+              name="last_name"
+              #lastNameInput="ngModel"
+              required
+              placeholder=" "
+              [class.active]="last_name"
+            />
+            <label [class.active]="last_name">Nom</label>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            #emailInput="ngModel"
+            required
+            email
+            placeholder=" "
+            [class.active]="email"
+          />
+          <label [class.active]="email">Adresse email</label>
+          <div class="error-message" *ngIf="emailInput.invalid && emailInput.touched">
+            <span *ngIf="emailInput.errors?.['required']">Email requis</span>
+            <span *ngIf="emailInput.errors?.['email']">Format invalide</span>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            #passwordInput="ngModel"
+            required
+            minlength="6"
+            placeholder=" "
+            [class.active]="password"
+          />
+          <label [class.active]="password">Mot de passe</label>
+          <div class="error-message" *ngIf="passwordInput.invalid && passwordInput.touched">
+            <span *ngIf="passwordInput.errors?.['required']">Mot de passe requis</span>
+            <span *ngIf="passwordInput.errors?.['minlength']">Minimum 6 caractères</span>
+          </div>
+        </div>
+
+        <button type="submit">Créer mon compte &rarr;</button>
+
+        <div class="login-link">
+          <p>Déjà inscrit ?&nbsp;<a href="#" (click)="onLogin($event)">Se connecter</a></p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="deco-panel">
+    <div class="deco-border"></div>
+    <div class="deco-content">
+      <span class="brand-mark">&#10022;</span>
+      <h1 class="deco-title">Votre espace<br><em>créatif</em><br>vous attend</h1>
+      <div class="deco-rule"></div>
+      <p class="deco-sub">Post</p>
+    </div>
+    <div class="deco-steps">
+      <div class="deco-step">
+        <span class="step-num">1</span>
+        <span class="step-text">Créez votre compte</span>
+      </div>
+      <div class="deco-step">
+        <span class="step-num">2</span>
+        <span class="step-text">Choisissez votre style</span>
+      </div>
+      <div class="deco-step">
+        <span class="step-num">3</span>
+        <span class="step-text">Publiez avec élégance</span>
+      </div>
+    </div>
+    <div class="deco-ornament">SP</div>
+  </div>
+
+</div>

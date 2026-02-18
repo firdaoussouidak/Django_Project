@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=gateway.settings
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - POST_SERVICE_URL=http://post-service:8000
+    networks:
+      - microservices-network
+    depends_on:
+      - auth-service
+      - post-service
+    command: >
+      sh -c "sleep 10 &&
+             python manage.py migrate &&
+             gunicorn gateway.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+networks:
+  microservices-network:
+    driver: bridge

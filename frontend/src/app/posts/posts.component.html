@@ -1,0 +1,194 @@
+<header class="site-header">
+  <div class="brand">&#10022; Post</div>
+  <p class="brand-sub">Créez vos posts avec élégance</p>
+</header>
+
+<main class="main-layout">
+  <section class="form-panel">
+    <h2 class="panel-title">Personnaliser votre post</h2>
+    <div class="post-form">
+
+      <!-- COLOR -->
+      <div class="form-group">
+        <label class="form-label">Couleur principale</label>
+        <div class="color-grid">
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='bordeaux'" data-theme="bordeaux" (click)="setTheme('bordeaux')"></div><span class="color-label">Bordeaux</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='noir'"       data-theme="noir"       (click)="setTheme('noir')"></div><span class="color-label">Noir</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='navy'"       data-theme="navy"       (click)="setTheme('navy')"></div><span class="color-label">Navy</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='forest'"     data-theme="forest"     (click)="setTheme('forest')"></div><span class="color-label">Forêt</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='terracotta'" data-theme="terracotta" (click)="setTheme('terracotta')"></div><span class="color-label">Terracotta</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='blush'"      data-theme="blush"      (click)="setTheme('blush')"></div><span class="color-label">Blush</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='olive'"      data-theme="olive"      (click)="setTheme('olive')"></div><span class="color-label">Olive</span></div>
+          <div class="color-item"><div class="color-dot" [class.active]="currentTheme==='caramel'"    data-theme="caramel"    (click)="setTheme('caramel')"></div><span class="color-label">Caramel</span></div>
+        </div>
+      </div>
+
+      <!-- STYLES -->
+      <div class="form-group">
+        <label class="form-label">Choisir un style</label>
+        <div class="style-grid">
+          <div class="style-card" [class.active]="currentStyle==='style1'"  (click)="selectStyle('style1')">
+            <div class="style-thumb style1-thumb"><div class="t-photo"></div><div class="t-badge"></div><div class="t-block"><div class="t-line s"></div><div class="t-line"></div></div></div>
+            <span class="style-name">1 — Portrait</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style2'"  (click)="selectStyle('style2')">
+            <div class="style-thumb style2-thumb"><div class="t-photo r"></div><div class="t-word">MOT</div><div class="t-block b"><div class="t-line"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">2 — Éditorial</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style3'"  (click)="selectStyle('style3')">
+            <div class="style-thumb style3-thumb"><div class="t-arch"></div><div class="t-vtxt">FRASE</div><div class="t-circle"></div></div>
+            <span class="style-name">3 — Arche</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style4'"  (click)="selectStyle('style4')">
+            <div class="style-thumb style4-thumb"><div class="t-photo r"></div><div class="t-arch-dark"></div><div class="t-block l"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">4 — Split</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style5'"  (click)="selectStyle('style5')">
+            <div class="style-thumb style5-thumb"><div class="t-photo"></div><div class="t-curve"></div><div class="t-block"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">5 — Courbe</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style6'"  (click)="selectStyle('style6')">
+            <div class="style-thumb style6-thumb"><div class="t-lblock"><div class="t-line m"></div><div class="t-line"></div><div class="t-line s"></div></div><div class="t-photo r"></div></div>
+            <span class="style-name">6 — Duo</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style7'"  (click)="selectStyle('style7')">
+            <div class="style-thumb style7-thumb"><div class="t-big-text">TITRE</div><div class="t-cline"></div><div class="t-sub"><div class="t-line"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">7 — Minimal</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style8'"  (click)="selectStyle('style8')">
+            <div class="style-thumb style8-thumb"><div class="t-bigcirc"><div class="t-innerc"></div></div></div>
+            <span class="style-name">8 — Cercle</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style9'"  (click)="selectStyle('style9')">
+            <div class="style-thumb style9-thumb"><div class="t-diag"></div><div class="t-photo dp"></div></div>
+            <span class="style-name">9 — Diagonal</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style10'" (click)="selectStyle('style10')">
+            <div class="style-thumb style10-thumb"><div class="t-topbar"></div><div class="t-card"><div class="t-line m"></div><div class="t-line"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">10 — Story</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style11'" (click)="selectStyle('style11')">
+            <div class="style-thumb style11-thumb"><div class="t-inner"><div class="t-line m"></div><div class="t-line s"></div><div class="t-line"></div></div></div>
+            <span class="style-name">11 — Cadre</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style12'" (click)="selectStyle('style12')">
+            <div class="style-thumb style12-thumb"><div class="t-topphoto"></div><div class="t-acbar"></div><div class="t-btxt"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">12 — Panorama</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style13'" (click)="selectStyle('style13')">
+            <div class="style-thumb style13-thumb"><div class="t-oval"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">13 — Big Idea</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style14'" (click)="selectStyle('style14')">
+            <div class="style-thumb style14-thumb"><div class="t-bgword">MOT</div><div class="t-quote">&ldquo;</div><div class="t-block center"><div class="t-line m"></div><div class="t-line"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">14 — Citation</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style15'" (click)="selectStyle('style15')">
+            <div class="style-thumb style15-thumb"><div class="t-toppart"><div class="t-line m"></div><div class="t-line"></div></div><div class="t-circle sm"></div></div>
+            <span class="style-name">15 — Grande Cit.</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style16'" (click)="selectStyle('style16')">
+            <div class="style-thumb style16-thumb"><div class="t-block dark"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">16 — Photo + Cit.</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style17'" (click)="selectStyle('style17')">
+            <div class="style-thumb style17-thumb"><div class="t-arch-cream"></div><div class="t-sign">Hello</div><div class="t-block sm"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">17 — Welcome</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style18'" (click)="selectStyle('style18')">
+            <div class="style-thumb style18-thumb"><div class="t-topword">INTRO</div><div class="t-circle2"></div><div class="t-block"><div class="t-line m"></div><div class="t-line s"></div></div></div>
+            <span class="style-name">18 — Intro</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style19'" (click)="selectStyle('style19')">
+            <div class="style-thumb style19-thumb"><div class="t-row"><div class="t-mini-circle"></div><div class="t-block sm"><div class="t-line m"></div><div class="t-line s"></div></div></div><div class="t-row"><div class="t-mini-circle"></div><div class="t-block sm"><div class="t-line m"></div><div class="t-line s"></div></div></div></div>
+            <span class="style-name">19 — Équipe</span>
+          </div>
+          <div class="style-card" [class.active]="currentStyle==='style20'" (click)="selectStyle('style20')">
+            <div class="style-thumb style20-thumb"><div class="t-block l"><div class="t-sign2">About</div><div class="t-line m"></div><div class="t-line s"></div></div><div class="t-photo r"></div></div>
+            <span class="style-name">20 — About</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BG TEXTE -->
+      <div class="form-group">
+        <label class="form-label">Fond des zones de texte</label>
+        <div class="bg-selector">
+          <div class="bg-option" [class.active]="currentBg==='floral'"   (click)="selectBg('floral')">
+            <div class="bg-preview bg-floral-preview" [style.backgroundImage]="floralBgStyle" style="background-size:cover;background-position:center;"></div><span>Floral</span>
+          </div>
+          <div class="bg-option" [class.active]="currentBg==='solid'"    (click)="selectBg('solid')">
+            <div class="bg-preview bg-solid-preview"></div><span>Uni</span>
+          </div>
+          <div class="bg-option" [class.active]="currentBg==='gradient'" (click)="selectBg('gradient')">
+            <div class="bg-preview bg-gradient-preview"></div><span>Dégradé</span>
+          </div>
+          <div class="bg-option" [class.active]="currentBg==='none'"     (click)="selectBg('none')">
+            <div class="bg-preview bg-none-preview"></div><span>Aucun</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAMPS -->
+      <div class="form-group">
+        <label class="form-label" for="mainWord">Mot / Accroche</label>
+        <input type="text" id="mainWord" class="form-input" [(ngModel)]="formValues.w" (input)="generatePost()" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="titleText">Titre</label>
+        <input type="text" id="titleText" class="form-input" [(ngModel)]="formValues.t" (input)="generatePost()" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="quoteText">Citation</label>
+        <textarea id="quoteText" class="form-textarea" rows="3" [(ngModel)]="formValues.q" (input)="generatePost()"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="bodyText">Corps du texte</label>
+        <textarea id="bodyText" class="form-textarea" rows="4" [(ngModel)]="formValues.b" (input)="generatePost()"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="authorText">Auteur / Signature</label>
+        <input type="text" id="authorText" class="form-input" [(ngModel)]="formValues.a" (input)="generatePost()" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="handleText">&#64;handle</label>
+        <input type="text" id="handleText" class="form-input" [(ngModel)]="formValues.h" (input)="generatePost()" />
+      </div>
+
+      <!-- IMAGE -->
+      <div class="form-group">
+        <label class="form-label">Image</label>
+        <div class="upload-zone"
+             (click)="imgUpload.click()"
+             [style.backgroundImage]="uploadedImage ? 'url('+uploadedImage+')' : null"
+             [style.backgroundSize]="uploadedImage ? 'cover' : null"
+             [style.backgroundPosition]="uploadedImage ? 'center' : null">
+          <input #imgUpload type="file" accept="image/*" style="display:none" (change)="handleImageUpload($event)" />
+          <div class="upload-icon" *ngIf="!uploadedImage">&#11014;</div>
+          <p class="upload-text" *ngIf="!uploadedImage">Cliquez pour uploader</p>
+          <p class="upload-hint" *ngIf="!uploadedImage">PNG, JPG — 1080×1080 recommandé</p>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-generate" (click)="generatePost()">
+          <span>Générer le post</span><span class="btn-arrow">&#8594;</span>
+        </button>
+        <button type="button" class="btn-reset" (click)="resetForm()">Réinitialiser</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ PREVIEW ═══ -->
+  <section class="preview-panel">
+    <div class="preview-header">
+      <h2 class="panel-title">Aperçu</h2>
+    </div>
+    <div class="preview-wrapper">
+      <div class="post-preview" [ngClass]="'post-' + currentStyle" [innerHTML]="postHtml"></div>
+    </div>
+    <p class="preview-note">&#10022; Mise à jour en temps réel</p>
+  </section>
+
+</main>

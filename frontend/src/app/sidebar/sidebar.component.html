@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <!-- Logo -->
+  <div class="navbar-logo">
+    <h2>Post</h2>
+  </div>
+
+  <!-- Navigation + Recherche -->
+  <ul class="navbar-nav">
+    <!-- Élément de recherche (intégré comme un élément de menu) -->
+    <li class="nav-item search-item">
+      <form class="search-form" (submit)="onSearch($event)">
+        <input type="text" placeholder="Rechercher..." class="search-input" aria-label="Rechercher">
+        <button type="submit" class="search-btn" aria-label="Lancer la recherche">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </li>
+    <!-- Icône Créer -->
+    <li class="nav-item">
+      <a href="#">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span class="label">Créer</span>
+      </a>
+    </li>
+    <!-- Icône Profil -->
+    <li class="nav-item">
+      <a href="#">
+        <span class="icon"><i class="fas fa-user"></i></span>
+        <span class="label">Profil</span>
+      </a>
+    </li>
+  </ul>
+</nav>
