@@ -1,5 +1,5 @@
 <header class="site-header">
-  <div class="brand">&#10022; Post</div>
+  <a class="brand" routerLink="/home">&#10022; Post</a>
   <p class="brand-sub">Créez vos posts avec élégance</p>
 </header>
 
@@ -8,7 +8,6 @@
     <h2 class="panel-title">Personnaliser votre post</h2>
     <div class="post-form">
 
-      <!-- COLOR -->
       <div class="form-group">
         <label class="form-label">Couleur principale</label>
         <div class="color-grid">
@@ -23,7 +22,6 @@
         </div>
       </div>
 
-      <!-- STYLES -->
       <div class="form-group">
         <label class="form-label">Choisir un style</label>
         <div class="style-grid">
@@ -110,7 +108,6 @@
         </div>
       </div>
 
-      <!-- BG TEXTE -->
       <div class="form-group">
         <label class="form-label">Fond des zones de texte</label>
         <div class="bg-selector">
@@ -129,7 +126,6 @@
         </div>
       </div>
 
-      <!-- CHAMPS -->
       <div class="form-group">
         <label class="form-label" for="mainWord">Mot / Accroche</label>
         <input type="text" id="mainWord" class="form-input" [(ngModel)]="formValues.w" (input)="generatePost()" />
@@ -155,7 +151,6 @@
         <input type="text" id="handleText" class="form-input" [(ngModel)]="formValues.h" (input)="generatePost()" />
       </div>
 
-      <!-- IMAGE -->
       <div class="form-group">
         <label class="form-label">Image</label>
         <div class="upload-zone"
@@ -174,13 +169,15 @@
         <button type="button" class="btn-generate" (click)="generatePost()">
           <span>Générer le post</span><span class="btn-arrow">&#8594;</span>
         </button>
+        <button type="button" class="btn-generate" (click)="savePost()">
+          <span>Publier le post</span><span class="btn-arrow">&#8594;</span>
+        </button>
         <button type="button" class="btn-reset" (click)="resetForm()">Réinitialiser</button>
       </div>
 
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════ PREVIEW ═══ -->
   <section class="preview-panel">
     <div class="preview-header">
       <h2 class="panel-title">Aperçu</h2>

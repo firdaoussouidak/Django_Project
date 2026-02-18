@@ -1,0 +1,345 @@
+<!-- ══════════════════ TOPBAR ══════════════════ -->
+<header class="topbar">
+  <a class="brand" routerLink="/">&#10022; Post</a>
+
+  <div class="search-wrap">
+    <span class="search-icon">&#9901;</span>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Rechercher des posts, auteurs…"
+      [(ngModel)]="searchQuery"
+      (input)="handleSearch()"
+    />
+  </div>
+
+  <nav class="nav-actions">
+    <button class="btn-nav btn-profile" (click)="goToProfile()">
+      &#128100; Profil
+    </button>
+    <button class="btn-nav btn-create" (click)="goToCreate()">
+      &#65291; Créer
+    </button>
+    <div class="nav-divider"></div>
+    <div class="avatar-wrap" (click)="goToProfile()" title="Mon compte">
+      <div class="avatar-img">{{ userInitials }}</div>
+    </div>
+    <button class="btn-nav btn-logout" (click)="logout()" title="Se déconnecter">
+      &#9167;
+    </button>
+  </nav>
+</header>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">&#10022; Bienvenue sur votre espace créatif</p>
+    <h1 class="hero-title">L'élégance commence par une belle histoire</h1>
+    <p class="hero-sub">
+      Créez, partagez et inspirez avec des posts raffinés. Chaque publication
+      est une œuvre, chaque mot compte.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ stats.posts }}</span>
+        <span class="hero-stat-label">Posts créés</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ stats.followers }}</span>
+        <span class="hero-stat-label">Abonnés</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ stats.likes }}</span>
+        <span class="hero-stat-label">J'aime</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Mini preview 1 — Minimal -->
+    <div class="hero-mini ps7-mini">
+      <div class="hm-tl"></div>
+      <div class="hm-br"></div>
+      <div class="hm-deco"></div>
+      <div class="hm-ey">Inspiration</div>
+      <div class="hm-ct">Big ideas start small</div>
+      <div class="hm-rule"></div>
+    </div>
+    <!-- Mini preview 2 — Cadre -->
+    <div class="hero-mini ps11-mini">
+      <div class="hm-fr"></div>
+      <div class="hm-in">
+        <div class="hm-av"></div>
+        <div class="hm-orn">&#10022; &#10022; &#10022;</div>
+        <div class="hm-ct-sm">Créez avec passion</div>
+        <div class="hm-rule"></div>
+      </div>
+    </div>
+    <!-- Mini preview 3 — Citation -->
+    <div class="hero-mini ps14-mini">
+      <span class="hm-qm">&ldquo;</span>
+      <p class="hm-qt">Ce qui compte, c'est la beauté du geste.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MAIN LAYOUT ══════════════════ -->
+<div class="main-layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar-left">
+    <div class="sb-section">
+      <div class="sb-label">Navigation</div>
+      <a class="sb-item" [class.active]="activeNav === 'feed'"          (click)="setNav('feed')">
+        <span class="sb-icon">&#8862;</span> Fil d'actualité
+      </a>
+      <a class="sb-item" [class.active]="activeNav === 'myposts'"       (click)="setNav('myposts')">
+        <span class="sb-icon">&#9703;</span> Mes posts
+      </a>
+      <a class="sb-item" [class.active]="activeNav === 'favorites'"     (click)="setNav('favorites')">
+        <span class="sb-icon">&#9825;</span> Favoris
+      </a>
+      <a class="sb-item" [class.active]="activeNav === 'explore'"       (click)="setNav('explore')">
+        <span class="sb-icon">&#9678;</span> Explorer
+      </a>
+      <a class="sb-item" [class.active]="activeNav === 'notifications'" (click)="setNav('notifications')">
+        <span class="sb-icon">&#9633;</span> Notifications
+        <span class="notif-badge" *ngIf="notifCount > 0">{{ notifCount }}</span>
+      </a>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-section">
+      <div class="sb-label">Styles</div>
+      <a class="sb-item" [class.active]="activeFilter === 'minimal'"   (click)="filterStyle('minimal')">
+        <span class="sb-icon">&mdash;</span> Minimal
+      </a>
+      <a class="sb-item" [class.active]="activeFilter === 'editorial'" (click)="filterStyle('editorial')">
+        <span class="sb-icon">&#9707;</span> Éditorial
+      </a>
+      <a class="sb-item" [class.active]="activeFilter === 'citation'"  (click)="filterStyle('citation')">
+        <span class="sb-icon">&#10077;</span> Citations
+      </a>
+      <a class="sb-item" [class.active]="activeFilter === 'portrait'"  (click)="filterStyle('portrait')">
+        <span class="sb-icon">&#9704;</span> Portrait
+      </a>
+      <a class="sb-item" [class.active]="activeFilter === 'all'"       (click)="filterStyle('all')">
+        <span class="sb-icon">&#8857;</span> Tout voir
+      </a>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-section">
+      <a class="sb-item settings-link" (click)="goToSettings()">
+        <span class="sb-icon">&#9881;</span> Paramètres
+      </a>
+    </div>
+  </aside>
+
+  <!-- FEED -->
+  <main class="feed">
+    <div class="feed-header">
+      <h2 class="feed-title">&#10022; Fil d'actualité</h2>
+      <div class="feed-sort">
+        <button
+          class="sort-btn"
+          *ngFor="let s of sortOptions"
+          [class.active]="activeSort === s.value"
+          (click)="setSort(s.value)"
+        >
+          {{ s.label }}
+        </button>
+      </div>
+    </div>
+
+    <div class="posts-grid">
+      <div
+        class="post-wrap"
+        *ngFor="let post of filteredPosts; let i = index"
+        [style.animation-delay.s]="i * 0.06"
+        [class.dimmed]="activeFilter !== 'all' && post.style !== activeFilter"
+      >
+        <div
+          class="post-card"
+          (mouseenter)="post.hovered = true"
+          (mouseleave)="post.hovered = false"
+        >
+          <!-- ── STYLE 7 — Minimal ── -->
+          <div class="post-frame ps7" *ngIf="post.frameStyle === 'ps7'">
+            <div class="f-c-tl"></div>
+            <div class="f-c-br"></div>
+            <div class="f-deco"></div>
+            <p class="f-ey">{{ post.word }}</p>
+            <h2 class="f-ct">{{ post.title }}</h2>
+            <div class="f-rule"></div>
+            <p class="f-cb">{{ post.body }}</p>
+            <span class="f-ch">{{ post.handle }}</span>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- ── STYLE 9 — Diagonal ── -->
+          <div class="post-frame ps9" *ngIf="post.frameStyle === 'ps9'">
+            <div class="f-diag"></div>
+            <div
+              class="f-ph"
+              [style.background-image]="post.image ? 'url(' + post.image + ')' : 'none'"
+            ></div>
+            <div class="f-cw9">
+              <p class="f-ey">{{ post.word }}</p>
+              <h2 class="f-ct">{{ post.title }}</h2>
+              <p class="f-cb">{{ post.body }}</p>
+              <span class="f-ch">{{ post.handle }}</span>
+            </div>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- ── STYLE 14 — Citation ── -->
+          <div class="post-frame ps14" *ngIf="post.frameStyle === 'ps14'">
+            <div class="f-bgw">INSPIRE</div>
+            <span class="f-qm">&ldquo;</span>
+            <p class="f-qt">{{ post.quote }}</p>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- ── STYLE 11 — Cadre ── -->
+          <div class="post-frame ps11" *ngIf="post.frameStyle === 'ps11'">
+            <div class="f-fr"></div>
+            <div class="f-in">
+              <div
+                class="f-av"
+                [style.background-image]="post.image ? 'url(' + post.image + ')' : 'none'"
+              ></div>
+              <div class="f-orn">&#10022; &#10022; &#10022;</div>
+              <h2 class="f-ct">{{ post.title }}</h2>
+              <div class="f-rule"></div>
+              <p class="f-cb">{{ post.body }}</p>
+              <span class="f-ch">{{ post.handle }}</span>
+            </div>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- ── STYLE 16 — Photo + Citation ── -->
+          <div class="post-frame ps16" *ngIf="post.frameStyle === 'ps16'">
+            <div
+              class="f-ph"
+              [style.background-image]="post.image ? 'url(' + post.image + ')' : 'none'"
+            ></div>
+            <div class="f-ov16"></div>
+            <div class="f-cw16">
+              <p class="f-qt">&ldquo;{{ post.quote }}&rdquo;</p>
+              <span class="f-au">{{ post.author }}</span>
+            </div>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- ── STYLE 6 — Duo ── -->
+          <div class="post-frame ps6" *ngIf="post.frameStyle === 'ps6'">
+            <div class="f-lt">
+              <h2 class="f-ct">{{ post.title }}</h2>
+              <p class="f-cb">{{ post.body }}</p>
+            </div>
+            <div
+              class="f-ph f-ph6"
+              [style.background-image]="post.image ? 'url(' + post.image + ')' : 'none'"
+            ></div>
+            <div class="hover-ov" [class.visible]="post.hovered">
+              <button class="ov-btn" (click)="viewPost(post)">Voir</button>
+              <button class="ov-btn" (click)="editPost(post)">Éditer</button>
+            </div>
+          </div>
+
+          <!-- META -->
+          <div class="post-meta">
+            <div class="post-author">
+              <div class="p-av" [style.background]="post.authorColor">
+                {{ post.authorInitials }}
+              </div>
+              <span class="p-name">{{ post.authorName }}</span>
+            </div>
+            <div class="p-actions">
+              <button
+                class="p-btn"
+                [class.liked]="post.liked"
+                (click)="toggleLike(post)"
+              >
+                {{ post.liked ? '♥' : '♡' }}
+                <span class="p-count">{{ post.likes }}</span>
+              </button>
+              <button class="p-btn" (click)="commentPost(post)">
+                &#9998; <span class="p-count">{{ post.comments }}</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /posts-grid -->
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="sidebar-right">
+
+    <div class="widget">
+      <h3 class="widget-title">&#10022; Tendances</h3>
+      <div class="tag-list">
+        <span
+          class="tag"
+          *ngFor="let tag of trendingTags"
+          (click)="searchTag(tag)"
+        >{{ tag }}</span>
+      </div>
+    </div>
+
+    <div class="widget">
+      <h3 class="widget-title">Créateurs suggérés</h3>
+      <div class="creator-item" *ngFor="let creator of suggestedCreators">
+        <div class="cr-av" [style.background]="creator.color">
+          {{ creator.initials }}
+        </div>
+        <div class="cr-info">
+          <p class="cr-name">{{ creator.name }}</p>
+          <p class="cr-handle">{{ creator.handle }}</p>
+        </div>
+        <button
+          class="btn-follow"
+          [class.followed]="creator.followed"
+          (click)="toggleFollow(creator)"
+        >
+          {{ creator.followed ? 'Suivi ✓' : 'Suivre' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="widget">
+      <h3 class="widget-title">Activité récente</h3>
+      <div class="act-item" *ngFor="let act of recentActivity">
+        <div class="act-icon">{{ act.icon }}</div>
+        <div>
+          <p class="act-text" [innerHTML]="act.text"></p>
+          <span class="act-time">{{ act.time }}</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- TOAST -->
+<div class="toast" [class.visible]="toastVisible">{{ toastMessage }}</div>

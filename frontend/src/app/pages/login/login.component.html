@@ -1,0 +1,41 @@
+<div class="page-wrapper">
+  <div class="deco-panel">
+    <div class="deco-border"></div>
+    <div class="deco-content">
+      <span class="brand-mark">&#10022;</span>
+      <h1 class="deco-title">Créez avec<br><em>élégance</em></h1>
+      <div class="deco-rule"></div>
+      <p class="deco-sub">Post</p>
+    </div>
+    <div class="deco-ornament">POST</div>
+  </div>
+
+  <div class="form-panel">
+    <div class="wrapper">
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+
+        <h2>Connexion</h2>
+        <span class="form-eyebrow">Accédez à votre espace créatif</span>
+
+        <div class="input-field">
+          <input type="text" [(ngModel)]="username" name="username" id="username" required placeholder=" ">
+          <label for="username">Nom d'utilisateur</label>
+        </div>
+
+        <div class="input-field">
+          <input type="password" [(ngModel)]="password" name="password" required placeholder=" ">
+          <label>Mot de passe</label>
+        </div>
+
+        <button type="submit">Se connecter</button>
+
+        <div class="register">
+          <p>Pas encore de compte ?&nbsp;<a href="/signup" (click)="onRegister($event)">S'inscrire</a></p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

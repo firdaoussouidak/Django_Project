@@ -2,6 +2,7 @@
 
   <div class="form-panel">
     <div class="wrapper">
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
       <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
 
         <h2>S'inscrire</h2>
@@ -119,7 +120,7 @@
         <span class="step-text">Publiez avec élégance</span>
       </div>
     </div>
-    <div class="deco-ornament">SP</div>
+    <div class="deco-ornament">POST</div>
   </div>
 
 </div>

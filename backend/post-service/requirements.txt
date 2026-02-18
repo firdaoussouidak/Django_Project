@@ -2,4 +2,6 @@ Django
 djangorestframework
 djangorestframework-simplejwt
 mysqlclient
+django-cors-headers
 gunicorn
+Pillow
