@@ -1,0 +1,323 @@
+<div class="profile-page" *ngIf="!loading">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a class="brand" routerLink="/">&#10022; Post</a>
+    <nav class="nav-actions">
+      <button class="btn-nav btn-back" (click)="goHome()">&#8592; Retour</button>
+      <div class="nav-divider"></div>
+      <div class="avatar-wrap" title="Mon compte">
+        <div class="avatar-img">{{ userInitials }}</div>
+      </div>
+      <button class="btn-nav btn-logout" (click)="logout()" title="Se déconnecter">&#9167;</button>
+    </nav>
+  </header>
+
+  <!-- HERO PROFILE BANNER -->
+  <section class="profile-hero">
+    <div class="hero-pattern"></div>
+    <div class="profile-hero-content">
+      <div class="profile-avatar-large">
+        <div class="avatar-ring">
+          <div class="avatar-letters">{{ userInitials }}</div>
+        </div>
+        <div class="avatar-ornament">&#10022;</div>
+      </div>
+      <div class="profile-hero-info">
+        <p class="profile-eyebrow">&#10022; Profil créateur</p>
+        <h1 class="profile-name">{{ profile?.first_name }} {{ profile?.last_name }}</h1>
+        <p class="profile-username">{{ '@' + profile?.username }}</p>
+        <p class="profile-email">{{ profile?.email }}</p>
+        <div class="profile-stats">
+          <div class="p-stat">
+            <span class="p-stat-num">{{ myPosts.length }}</span>
+            <span class="p-stat-label">Publications</span>
+          </div>
+          <div class="p-stat-divider"></div>
+          <div class="p-stat">
+            <span class="p-stat-num">{{ totalLikes }}</span>
+            <span class="p-stat-label">J'aime reçus</span>
+          </div>
+          <div class="p-stat-divider"></div>
+          <div class="p-stat">
+            <span class="p-stat-num">{{ myPosts.length > 0 ? (myPosts.length * 3) : 0 }}</span>
+            <span class="p-stat-label">Commentaires</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-edit-profile" (click)="openEditProfile()">
+        &#9998; Modifier le profil
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN LAYOUT -->
+  <div class="profile-main">
+
+    <!-- LEFT: EDIT FORM (if open) -->
+    <aside class="profile-sidebar" [class.expanded]="editingProfile">
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">&#10022; Mon compte</h3>
+        <div class="account-info-list">
+          <div class="account-info-item">
+            <span class="account-info-label">Prénom</span>
+            <span class="account-info-value">{{ profile?.first_name }}</span>
+          </div>
+          <div class="account-info-item">
+            <span class="account-info-label">Nom</span>
+            <span class="account-info-value">{{ profile?.last_name }}</span>
+          </div>
+          <div class="account-info-item">
+            <span class="account-info-label">Pseudo</span>
+            <span class="account-info-value">{{ '@' + profile?.username }}</span>
+          </div>
+          <div class="account-info-item">
+            <span class="account-info-label">Email</span>
+            <span class="account-info-value">{{ profile?.email }}</span>
+          </div>
+        </div>
+        <button class="btn-edit-sidebar" (click)="openEditProfile()">Modifier &#8599;</button>
+      </div>
+
+      <div class="sidebar-card sidebar-card-dark">
+        <h3 class="sidebar-title light">&#9678; Actions rapides</h3>
+        <button class="quick-action" (click)="goCreate()">
+          <span class="qa-icon">&#65291;</span> Créer un post
+        </button>
+        <button class="quick-action" (click)="goHome()">
+          <span class="qa-icon">&#8862;</span> Fil d'actualité
+        </button>
+        <button class="quick-action danger" (click)="logout()">
+          <span class="qa-icon">&#9167;</span> Déconnexion
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN: MY POSTS GRID -->
+    <main class="posts-section">
+
+      <!-- SECTION HEADER -->
+      <div class="posts-section-header">
+        <div class="section-title-wrap">
+          <h2 class="section-title">&#9703; Mes publications</h2>
+          <span class="posts-count">{{ myPosts.length }} post{{ myPosts.length > 1 ? 's' : '' }}</span>
+        </div>
+        <div class="posts-sort">
+          <button class="sort-btn" [class.active]="sortOrder === 'recent'" (click)="setSort('recent')">Récents</button>
+          <button class="sort-btn" [class.active]="sortOrder === 'oldest'" (click)="setSort('oldest')">Anciens</button>
+        </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="posts-empty" *ngIf="myPosts.length === 0">
+        <div class="empty-ornament">&#10022;</div>
+        <p class="empty-title">Vous n'avez pas encore de publications</p>
+        <p class="empty-sub">Commencez à créer du contenu et inspirez votre audience.</p>
+        <button class="btn-create-empty" (click)="goCreate()">&#65291; Créer mon premier post</button>
+      </div>
+
+      <!-- POSTS GRID -->
+      <div class="my-posts-grid" *ngIf="myPosts.length > 0">
+        <div
+          class="my-post-card"
+          *ngFor="let post of sortedPosts; let i = index"
+          [style.animation-delay.s]="i * 0.06"
+        >
+          <!-- POST PREVIEW -->
+          <div class="my-post-preview">
+            <div class="post-frame-dynamic" [innerHTML]="post.renderedHtml"></div>
+            <div class="post-style-badge">{{ styleLabel(post.style) }}</div>
+          </div>
+
+          <!-- POST INFO -->
+          <div class="my-post-info">
+            <div class="my-post-meta">
+              <span class="my-post-date">{{ formatDate(post.date) }}</span>
+              <span class="my-post-theme theme-dot" [style.background]="themeColor(post.theme)"></span>
+            </div>
+          </div>
+
+          <!-- POST ACTIONS -->
+          <div class="my-post-actions">
+            <button class="action-btn btn-edit" (click)="editPost(post)">
+              &#9998; Modifier
+            </button>
+            <button class="action-btn btn-delete" (click)="confirmDelete(post)">
+              &#10005; Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- LOADING STATE -->
+<div class="profile-loading" *ngIf="loading">
+  <div class="loading-ornament">&#10022;</div>
+  <p>Chargement du profil…</p>
+</div>
+
+<!-- MODAL: EDIT PROFILE -->
+<div class="modal-overlay" [class.open]="editingProfile" (click)="closeEditProfile()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">&#10022; Modifier le profil</h2>
+      <button class="modal-close" (click)="closeEditProfile()">&#10005;</button>
+    </div>
+    <form class="modal-form" (submit)="saveProfile($event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input class="form-input" type="text" [(ngModel)]="editForm.first_name" name="first_name" placeholder="Votre prénom" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input class="form-input" type="text" [(ngModel)]="editForm.last_name" name="last_name" placeholder="Votre nom" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom d'utilisateur</label>
+        <input class="form-input" type="text" [(ngModel)]="editForm.username" name="username" placeholder="@username" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse email</label>
+        <input class="form-input" type="email" [(ngModel)]="editForm.email" name="email" placeholder="votre@email.com" />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeEditProfile()">Annuler</button>
+        <button type="submit" class="btn-save" [disabled]="saving">
+          {{ saving ? 'Enregistrement…' : '&#10003; Enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!-- MODAL: EDIT POST -->
+<div class="modal-overlay modal-overlay-lg" [class.open]="editingPost" (click)="closeEditPost()">
+  <div class="modal-panel modal-panel-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">&#9998; Modifier le post</h2>
+      <button class="modal-close" (click)="closeEditPost()">&#10005;</button>
+    </div>
+    <form class="modal-form" (submit)="savePost($event)">
+       <div class="form-grid-post">
+        <!-- Ligne 1 : Photo | Style | Thème | Fond -->
+        <div class="form-group">
+            <label class="form-label">Image</label>
+            <div class="edit-img-preview" *ngIf="editPostImagePreview">
+            <img [src]="editPostImagePreview" alt="preview" />
+            </div>
+            <div class="edit-img-placeholder" *ngIf="!editPostImagePreview">
+            <span>&#9679; Aucune image</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Style</label>
+            <select class="form-input form-select" [(ngModel)]="editPostForm.style" name="style">
+            <option *ngFor="let s of STYLES" [value]="s.val">{{ s.label }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Thème</label>
+            <select class="form-input form-select" [(ngModel)]="editPostForm.theme" name="theme">
+            <option *ngFor="let t of THEMES" [value]="t">{{ t }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Fond</label>
+            <select class="form-input form-select" [(ngModel)]="editPostForm.bg" name="bg">
+            <option *ngFor="let b of BGS" [value]="b.val">{{ b.label }}</option>
+            </select>
+        </div>
+
+        <!-- Ligne 2 : Changer | Titre | Accroche | vide -->
+        <div class="form-group">
+            <label class="form-label">&nbsp;</label>
+            <label class="btn-upload">
+            &#8599; Changer l'image
+            <input type="file" accept="image/*" (change)="onEditPostImageChange($event)" style="display:none" />
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Titre</label>
+            <input class="form-input" type="text" [(ngModel)]="editPostForm.title" name="title" placeholder="Titre du post" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Accroche</label>
+            <input class="form-input" type="text" [(ngModel)]="editPostForm.accroche" name="accroche" placeholder="Texte court / mot-clé" />
+        </div>
+        <div></div><!-- spacer -->
+
+        </div>
+
+        <!-- CONTENT -->
+      <div class="form-group">
+        <label class="form-label">Contenu</label>
+        <textarea class="form-input form-textarea" [(ngModel)]="editPostForm.content" name="content" rows="3" placeholder="Votre texte principal..."></textarea>
+      </div>
+
+      <!-- CITATION -->
+      <div class="form-group">
+        <label class="form-label">Citation</label>
+        <textarea class="form-input form-textarea" [(ngModel)]="editPostForm.citation" name="citation" rows="2" placeholder="Une citation..."></textarea>
+      </div>
+
+      <!-- HANDLE & SIGNATURE -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Handle</label>
+          <input class="form-input" type="text" [(ngModel)]="editPostForm.handle" name="handle" placeholder="@handle" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Signature auteur</label>
+          <input class="form-input" type="text" [(ngModel)]="editPostForm.auteur_signature" name="auteur_signature" placeholder="Pr&eacute;nom Nom" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeEditPost()">Annuler</button>
+        <button type="submit" class="btn-save" [disabled]="savingPost">
+          {{ savingPost ? 'Enregistrement…' : '&#10003; Sauvegarder' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- MODAL: CONFIRM DELETE -->
+<div class="modal-overlay" [class.open]="deletingPost" (click)="cancelDelete()">
+  <div class="modal-panel modal-panel-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title danger">&#9888; Supprimer ce post ?</h2>
+      <button class="modal-close" (click)="cancelDelete()">&#10005;</button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="delete-ornament">&#10022;</div>
+      <p class="delete-text">Cette action est irréversible. Le post <strong>{{ postToDelete?.title || 'sans titre' }}</strong> sera définitivement supprimé.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
+      <button class="btn-delete-confirm" (click)="executeDelete()" [disabled]="deleting">
+        {{ deleting ? 'Suppression…' : '&#10005; Supprimer' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" [class.visible]="toastVisible">{{ toastMessage }}</div>

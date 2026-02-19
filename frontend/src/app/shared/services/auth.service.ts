@@ -21,6 +21,14 @@ export interface SignupRequest {
   last_name: string;
 }
 
+export interface UserProfile {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,4 +67,15 @@ export class AuthService {
   signup(userData: SignupRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/signup/`, userData);
   }
+  
+  
+  getProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/profile/`);
+  }
+
+  updateProfile(data: Partial<UserProfile>): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.apiUrl}/profile/`, data);
+  }
+
 }
+

@@ -78,3 +78,9 @@ class PostserviceView(GatewayView):
 
     def delete(self, request, endpoint=''):
         return self.forward_request(request, settings.POST_SERVICE_URL, endpoint)
+
+
+class PostserviceMediaView(GatewayView):
+    def get(self, request, endpoint=''):
+        full_endpoint = 'media/' + endpoint
+        return self.forward_request(request, settings.POST_SERVICE_URL, full_endpoint)
