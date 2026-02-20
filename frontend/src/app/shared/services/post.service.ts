@@ -20,6 +20,17 @@ export interface PostData {
   comments_count: number; 
 }
 
+export interface CommentData {
+  id: number;
+  content: string;
+  author_id: number;
+  author_username: string;
+  post: number;
+  created_at: string;
+}
+
+
+
 @Injectable({ providedIn: 'root' })
 export class PostService {
   private apiUrl = 'http://localhost:8000/api/post'; 
@@ -43,5 +54,13 @@ export class PostService {
 
   updatePost(id: number, formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/update/${id}/`, formData);
+  }
+
+  getComments(postId: number): Observable<CommentData[]> {
+    return this.http.get<CommentData[]>(`${this.apiUrl}/${postId}/comments/`);
+  }
+
+  createComment(postId: number, content: string): Observable<CommentData> {
+    return this.http.post<CommentData>(`${this.apiUrl}/${postId}/comments/create/`, { content });
   }
 }

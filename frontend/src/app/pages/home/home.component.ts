@@ -3,7 +3,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PostService, PostData } from '../../shared/services/post.service';
+import { PostService, PostData, CommentData } from '../../shared/services/post.service';
 
 export interface FeedPost extends PostData {
   likes: number;
@@ -59,6 +59,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   toastVisible = false;
   private toastTimer: any;
   posts: FeedPost[] = [];
+
+  commentingPost: FeedPost | null = null;
+  comments: CommentData[] = [];
+  loadingComments = false;
+  newComment = '';
+  sendingComment = false;
+
+  viewingPost: FeedPost | null = null;
 
   trendingTags = ['#motivation','#art','#lifestyle','#citation','#bienêtre','#mode','#voyage','#nature'];
 
@@ -123,7 +131,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const initials = (p.author_username || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
     return {
       ...p,
-      likes: 0, liked: false, hovered: false, commentsCount: 0,
+      likes: 0, liked: false, hovered: false, commentsCount: p.comments_count ?? 0,
       renderedHtml: this.renderPost(p),
       authorInitials: initials,
       authorColor: color,
@@ -358,8 +366,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   searchTag(tag: string): void { this.searchQuery = tag; this.handleSearch(); this.showToast('Tendance : ' + tag); }
   toggleLike(post: FeedPost): void { post.liked = !post.liked; post.likes += post.liked ? 1 : -1; }
-  commentPost(post: FeedPost): void { this.showToast('Commentaires #' + post.id); }
-  viewPost(post: FeedPost): void    { this.showToast('Voir #' + post.id); }
+  commentPost(post: FeedPost): void {
+    this.commentingPost = post;
+    this.comments = [];
+    this.newComment = '';
+    this.loadingComments = true;
+    this.postService.getComments(post.id).subscribe({
+      next: (data) => { this.comments = data; this.loadingComments = false; },
+      error: () => { this.loadingComments = false; }
+    });
+  }
+  viewPost(post: FeedPost): void {
+    this.viewingPost = post;
+  }
+  closeViewModal(): void {
+    this.viewingPost = null;
+  }
+
+
   editPost(post: FeedPost): void    { this.router.navigate(['/posts/edit', post.id]); }
 
   toggleFollow(creator: Creator): void {
@@ -372,5 +396,42 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.toastMessage = message;
     this.toastVisible = true;
     this.toastTimer = setTimeout(() => { this.toastVisible = false; }, 1800);
+  }
+
+  closeCommentModal(): void {
+    this.commentingPost = null;
+    this.comments = [];
+    this.newComment = '';
+  }
+
+  submitComment(): void {
+    if (!this.newComment.trim() || !this.commentingPost || this.sendingComment) return;
+    this.sendingComment = true;
+    this.postService.createComment(this.commentingPost.id, this.newComment.trim()).subscribe({
+      next: (c) => {
+        this.comments = [c, ...this.comments];
+        this.commentingPost!.commentsCount++;
+        // Mettre à jour le post dans le feed
+        const idx = this.posts.findIndex(p => p.id === this.commentingPost!.id);
+        if (idx !== -1) this.posts[idx].commentsCount = this.commentingPost!.commentsCount;
+        this.newComment = '';
+        this.sendingComment = false;
+      },
+      error: () => { this.sendingComment = false; }
+    });
+  }
+
+  formatCommentDate(dateStr: string): string {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - d.getTime()) / 1000);
+    if (diff < 60) return 'À l\'instant';
+    if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
+    if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)}h`;
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  }
+
+  commentInitials(username: string): string {
+    return (username || 'U').slice(0, 2).toUpperCase();
   }
 }

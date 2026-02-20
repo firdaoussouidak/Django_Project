@@ -161,7 +161,7 @@
 
           <div class="hover-ov" [class.visible]="post.hovered">
             <button class="ov-btn" (click)="viewPost(post)">Voir</button>
-            <button class="ov-btn" (click)="editPost(post)">Commenter</button>
+            <button class="ov-btn" (click)="commentPost(post)">Commenter</button>
           </div>
 
           <div class="post-meta">
@@ -225,3 +225,134 @@
 </div>
 
 <div class="toast" [class.visible]="toastVisible">{{ toastMessage }}</div>
+
+
+
+
+
+
+
+
+
+<!-- MODAL: COMMENTAIRES -->
+<div class="comment-overlay" [class.open]="commentingPost" (click)="closeCommentModal()">
+  <div class="comment-panel" (click)="$event.stopPropagation()">
+
+    <button class="comment-close" (click)="closeCommentModal()">&#10005;</button>
+
+    <div class="comment-left">
+      <div class="comment-post-frame">
+        <div class="post-frame-dynamic" [innerHTML]="commentingPost?.renderedHtml"></div>
+      </div>
+      <div class="comment-post-meta">
+        <div class="comment-post-author">
+          <div class="cp-av" [style.background]="commentingPost?.authorColor">
+            {{ commentingPost?.authorInitials }}
+          </div>
+          <div>
+            <p class="cp-name">{{ commentingPost?.author_username }}</p>
+            <p class="cp-title">{{ commentingPost?.title }}</p>
+          </div>
+        </div>
+        <div class="cp-stats">
+          <span class="cp-stat">&#9825; {{ commentingPost?.likes }}</span>
+          <span class="cp-stat">&#9998; {{ commentingPost?.commentsCount }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DROITE : commentaires -->
+    <div class="comment-right">
+      <div class="comment-right-header">
+        <h3 class="comment-title">&#9998; Commentaires</h3>
+        <span class="comment-count">{{ commentingPost?.commentsCount }}</span>
+      </div>
+
+      <!-- LISTE -->
+      <div class="comment-list">
+
+        <!-- Loading -->
+        <div class="comment-loading" *ngIf="loadingComments">
+          <span class="comment-spin">&#10022;</span> Chargement…
+        </div>
+
+        <!-- Vide -->
+        <div class="comment-empty" *ngIf="!loadingComments && comments.length === 0">
+          <p class="ce-icon">&#10022;</p>
+          <p class="ce-text">Soyez le premier à commenter</p>
+        </div>
+
+        <!-- Items -->
+        <div class="comment-item" *ngFor="let c of comments">
+          <div class="ci-avatar">{{ commentInitials(c.author_username) }}</div>
+          <div class="ci-body">
+            <div class="ci-head">
+              <span class="ci-name">{{ c.author_username }}</span>
+              <span class="ci-time">{{ formatCommentDate(c.created_at) }}</span>
+            </div>
+            <p class="ci-text">{{ c.content }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FORMULAIRE -->
+      <div class="comment-form">
+        <div class="cf-input-wrap">
+          <textarea
+            class="cf-input"
+            [(ngModel)]="newComment"
+            placeholder="Écrire un commentaire…"
+            rows="3"
+            (keydown.ctrl.enter)="submitComment()"
+          ></textarea>
+        </div>
+        <div class="cf-actions">
+          <span class="cf-hint">Ctrl + Entrée pour envoyer</span>
+          <button class="cf-btn" (click)="submitComment()" [disabled]="!newComment.trim() || sendingComment">
+            {{ sendingComment ? '…' : '&#9654; Publier' }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MODAL: VOIR POST -->
+<div class="view-overlay" [class.open]="viewingPost" (click)="closeViewModal()">
+  <div class="view-panel" (click)="$event.stopPropagation()">
+    <button class="comment-close" (click)="closeViewModal()">&#10005;</button>
+    <div class="view-post-frame">
+      <div class="post-frame-dynamic" [innerHTML]="viewingPost?.renderedHtml"></div>
+    </div>
+    <div class="view-post-meta">
+      <div class="vp-author">
+        <div class="cp-av" [style.background]="viewingPost?.authorColor">
+          {{ viewingPost?.authorInitials }}
+        </div>
+        <div>
+          <p class="cp-name">{{ viewingPost?.author_username }}</p>
+          <p class="cp-title">{{ viewingPost?.title }}</p>
+        </div>
+      </div>
+      <div class="cp-stats">
+        <span class="cp-stat">&#9825; {{ viewingPost?.likes }}</span>
+        <span class="cp-stat">&#9998; {{ viewingPost?.commentsCount }}</span>
+      </div>
+    </div>
+  </div>
+</div>
