@@ -63,4 +63,16 @@ export class PostService {
   createComment(postId: number, content: string): Observable<CommentData> {
     return this.http.post<CommentData>(`${this.apiUrl}/${postId}/comments/create/`, { content });
   }
+
+  getMyComments(): Observable<CommentData[]> {
+    return this.http.get<CommentData[]>(`${this.apiUrl}/comments/my-comments/`);
+  }
+
+  updateComment(commentId: number, content: string): Observable<CommentData> {
+    return this.http.put<CommentData>(`${this.apiUrl}/comments/update/${commentId}/`, { content });
+  }
+
+  deleteComment(commentId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/comments/delete/${commentId}/`);
+  }
 }

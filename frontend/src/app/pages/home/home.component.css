@@ -406,9 +406,6 @@ app-home .act-icon { width:24px; height:24px; border-radius:50%; background:var(
 app-home .act-text { font-size:0.63rem; color:var(--text-mid); margin-top:2px; margin-bottom: 2px; }
 app-home .act-time { font-size:0.56rem; color:var(--text-light); display:block; margin-top:1px; }
 
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
 app-home .toast { position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--accent); color:var(--cream-light); padding:9px 20px; border-radius:28px; font-family:'Raleway',sans-serif; font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; box-shadow:0 7px 26px var(--shadow-deep); opacity:0; transition:all 0.3s; z-index:999; pointer-events:none; white-space:nowrap; }
 app-home .toast.visible { opacity:1; transform:translateX(-50%) translateY(0); }
 
@@ -428,23 +425,6 @@ app-home .toast.visible { opacity:1; transform:translateX(-50%) translateY(0); }
   app-home .topbar { padding: 0 14px; }
   app-home .search-wrap { flex: 0 0 150px; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -573,7 +553,6 @@ app-home .cp-stat {
   letter-spacing: 0.06em;
 }
 
-/* ── DROITE ── */
 app-home .comment-right {
   flex: 1;
   display: flex; flex-direction: column;
@@ -598,7 +577,6 @@ app-home .comment-count {
   padding: 4px 10px; border-radius: 20px;
 }
 
-/* Liste scrollable */
 app-home .comment-list {
   flex: 1;
   overflow-y: auto;
@@ -659,7 +637,6 @@ app-home .ci-text {
   font-size: 0.72rem; color: var(--text-dark); line-height: 1.6; margin-bottom: 3px;
 }
 
-/* Formulaire */
 app-home .comment-form {
   padding: 14px 20px 18px;
   border-top: 1.5px solid var(--sand);
@@ -716,32 +693,11 @@ app-home .cf-btn:hover:not(:disabled) {
 }
 app-home .cf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Responsive */
 @media (max-width: 700px) {
   app-home .comment-panel { flex-direction: column; height: 95vh; width: 100%; border-radius: 12px 12px 0 0; position: fixed; bottom: 0; }
   app-home .comment-left { flex: 0 0 auto; border-right: none; border-bottom: 1.5px solid var(--sand); flex-direction: row; padding: 14px 16px; }
   app-home .comment-post-frame { width: 80px; height: 80px; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -813,10 +769,93 @@ app-home .vp-author {
   display: flex; align-items: center; gap: 10px;
 }
 
-/* Repositionner le bouton fermer pour ce modal */
 app-home .view-panel .comment-close {
   position: absolute;
   top: -14px; right: -14px;
   background: var(--cream-light);
   z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ══════════════════════════════════════════
+   MODAL: MES COMMENTAIRES
+══════════════════════════════════════════ */
+app-home .mycomments-overlay {
+  position: fixed; inset: 0;
+  background: rgba(42,32,22,0.65);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 300;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.28s;
+}
+app-home .mycomments-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+
+app-home .mycomments-panel {
+  position: relative;
+  width: 92vw; max-width: 560px;
+  height: 80vh; max-height: 620px;
+  background: var(--cream-light);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(42,32,22,0.45);
+  display: flex; flex-direction: column;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.28s;
+}
+app-home .mycomments-overlay.open .mycomments-panel {
+  transform: translateY(0) scale(1);
+}
+
+app-home .mycomments-header {
+  padding: 8px 20px 0px;
+  border-bottom: 1.5px solid var(--sand);
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+
+app-home .mycomments-list {
+  flex: 1;
+  padding: 20px 20px;
+}
+
+app-home .ci-actions {
+  display: flex; gap: 8px;
+  margin-top: 2px;
+  padding-top: 4px;
+  border-top: 1px solid var(--cream-mid);
+}
+
+app-home .ci-action-btn {
+  background: none; border: 1px solid var(--sand);
+  border-radius: 3px;
+  padding: 4px 9px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.54rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.15s;
+  color: var(--text-light);
+}
+
+app-home .ci-action-btn.edit:hover {
+  background: #ab6e45; border-color: #ab6e45;
+  color: var(--cream-light);
+}
+
+app-home .ci-action-btn.delete:hover {  
+  background: var(--accent); border-color: var(--accent);
+  color: var(--cream-light);
 }

@@ -3,6 +3,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { UserProfile } from '../../shared/services/auth.service';
 import { PostService, PostData, CommentData } from '../../shared/services/post.service';
 
 export interface FeedPost extends PostData {
@@ -38,11 +39,13 @@ const FLORAL = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0
   imports: [CommonModule, FormsModule, NgFor, NgIf, RouterLink],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  encapsulation: ViewEncapsulation.None   // ← CLEF DU PROBLÈME
+  encapsulation: ViewEncapsulation.None 
 })
+
+
 export class HomeComponent implements OnInit, OnDestroy {
 
-  userInitials = 'EJ';
+  profile: UserProfile | null = null;
   stats = { posts: 0, followers: '1.2k', likes: 0 };
   activeNav = 'feed';
   notifCount = 3;
@@ -67,6 +70,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   sendingComment = false;
 
   viewingPost: FeedPost | null = null;
+
+  myComments: CommentData[] = [];
+  loadingMyComments = false;
+  showMyCommentsModal = false;
+
+  editingCommentId: number | null = null;
+  editingCommentContent: string = '';
 
   trendingTags = ['#motivation','#art','#lifestyle','#citation','#bienêtre','#mode','#voyage','#nature'];
 
@@ -302,6 +312,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  get userInitials(): string {
+    if (!this.profile) return '?';
+    const fn = this.profile.first_name?.[0] ?? '';
+    const ln = this.profile.last_name?.[0] ?? '';
+    return (fn + ln).toUpperCase() || this.profile.username?.[0]?.toUpperCase() || 'U';
+  }
+
 
   get filteredPosts(): FeedPost[] {
     let result = [...this.posts];
@@ -332,6 +349,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.activeNav = nav;
     if (nav === 'myposts') this.loadMyPosts();
     else if (nav === 'feed') this.loadPosts();
+    else if (nav === 'commentaire') this.openMyComments();
     this.showToast(nav === 'feed' ? "Fil d'actualité" : nav);
   }
 
@@ -433,5 +451,54 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   commentInitials(username: string): string {
     return (username || 'U').slice(0, 2).toUpperCase();
+  }
+
+
+  openMyComments(): void {
+    this.showMyCommentsModal = true;
+    this.loadingMyComments = true;
+    this.myComments = [];
+    this.postService.getMyComments().subscribe({
+      next: (data) => { this.myComments = data; this.loadingMyComments = false; },
+      error: () => { this.loadingMyComments = false; }
+    });
+  }
+
+  closeMyCommentsModal(): void {
+    this.showMyCommentsModal = false;
+    this.myComments = [];
+  }
+
+  startEditComment(c: CommentData): void {
+    this.editingCommentId = c.id;
+    this.editingCommentContent = c.content;
+  }
+
+  cancelEditComment(): void {
+    this.editingCommentId = null;
+    this.editingCommentContent = '';
+  }
+
+  saveEditComment(c: CommentData): void {
+    if (!this.editingCommentContent.trim()) return;
+    this.postService.updateComment(c.id, this.editingCommentContent.trim()).subscribe({
+      next: (updated) => {
+        const idx = this.myComments.findIndex(x => x.id === c.id);
+        if (idx !== -1) this.myComments[idx].content = updated.content;
+        this.cancelEditComment();
+        this.showToast('Commentaire modifié');
+      },
+      error: () => this.showToast('Erreur lors de la modification')
+    });
+  }
+
+  deleteMyComment(c: CommentData): void {
+    this.postService.deleteComment(c.id).subscribe({
+      next: () => {
+        this.myComments = this.myComments.filter(x => x.id !== c.id);
+        this.showToast('Commentaire supprimé');
+      },
+      error: () => this.showToast('Erreur lors de la suppression')
+    });
   }
 }

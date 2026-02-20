@@ -85,8 +85,8 @@
       <a class="sb-item" [class.active]="activeNav==='favorites'"     (click)="setNav('favorites')">
         <span class="sb-icon">&#9825;</span> Favoris
       </a>
-      <a class="sb-item" [class.active]="activeNav==='explore'"       (click)="setNav('explore')">
-        <span class="sb-icon">&#9678;</span> Explorer
+      <a class="sb-item" [class.active]="activeNav==='commentaire'"   (click)="setNav('commentaire')">
+        <span class="sb-icon">&#9998;</span> Mes commentaires
       </a>
       <a class="sb-item" [class.active]="activeNav==='notifications'" (click)="setNav('notifications')">
         <span class="sb-icon">&#9633;</span> Notifications
@@ -229,12 +229,6 @@
 
 
 
-
-
-
-
-
-<!-- MODAL: COMMENTAIRES -->
 <div class="comment-overlay" [class.open]="commentingPost" (click)="closeCommentModal()">
   <div class="comment-panel" (click)="$event.stopPropagation()">
 
@@ -261,28 +255,23 @@
       </div>
     </div>
 
-    <!-- DROITE : commentaires -->
     <div class="comment-right">
       <div class="comment-right-header">
         <h3 class="comment-title">&#9998; Commentaires</h3>
         <span class="comment-count">{{ commentingPost?.commentsCount }}</span>
       </div>
 
-      <!-- LISTE -->
       <div class="comment-list">
 
-        <!-- Loading -->
         <div class="comment-loading" *ngIf="loadingComments">
           <span class="comment-spin">&#10022;</span> Chargement…
         </div>
 
-        <!-- Vide -->
         <div class="comment-empty" *ngIf="!loadingComments && comments.length === 0">
           <p class="ce-icon">&#10022;</p>
           <p class="ce-text">Soyez le premier à commenter</p>
         </div>
 
-        <!-- Items -->
         <div class="comment-item" *ngFor="let c of comments">
           <div class="ci-avatar">{{ commentInitials(c.author_username) }}</div>
           <div class="ci-body">
@@ -296,7 +285,6 @@
 
       </div>
 
-      <!-- FORMULAIRE -->
       <div class="comment-form">
         <div class="cf-input-wrap">
           <textarea
@@ -320,19 +308,6 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- MODAL: VOIR POST -->
 <div class="view-overlay" [class.open]="viewingPost" (click)="closeViewModal()">
   <div class="view-panel" (click)="$event.stopPropagation()">
     <button class="comment-close" (click)="closeViewModal()">&#10005;</button>
@@ -356,3 +331,53 @@
     </div>
   </div>
 </div>
+
+
+<div class="mycomments-overlay" [class.open]="showMyCommentsModal" (click)="closeMyCommentsModal()">
+  <div class="mycomments-panel" (click)="$event.stopPropagation()">
+    <button class="comment-close" (click)="closeMyCommentsModal()">&#10005;</button>
+
+    <div class="mycomments-header">
+      <h3 class="comment-title">&#9998; Mes commentaires</h3>
+      <span class="comment-count">{{ myComments.length }}</span>
+    </div>
+
+    <div class="comment-list mycomments-list">
+      <div class="comment-loading" *ngIf="loadingMyComments">
+        <span class="comment-spin">&#10022;</span> Chargement…
+      </div>
+      <div class="comment-empty" *ngIf="!loadingMyComments && myComments.length === 0">
+        <p class="ce-icon">&#10022;</p>
+        <p class="ce-text">Vous n'avez pas encore commenté</p>
+      </div>
+      <div class="comment-item" *ngFor="let c of myComments">
+        <div class="ci-avatar">{{ commentInitials(c.author_username) }}</div>
+        <div class="ci-body">
+          <div class="ci-head">
+            <span class="ci-name">Post #{{ c.post }}</span>
+            <span class="ci-time">{{ formatCommentDate(c.created_at) }}</span>
+          </div>
+
+          <ng-container *ngIf="editingCommentId !== c.id">
+            <p class="ci-text">{{ c.content }}</p>
+            <div class="ci-actions">
+              <button class="ci-action-btn edit" (click)="startEditComment(c)">&#9998; Modifier</button>
+              <button class="ci-action-btn delete" (click)="deleteMyComment(c)">&#10005; Supprimer</button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="editingCommentId === c.id">
+            <textarea class="cf-input" [(ngModel)]="editingCommentContent" rows="2"
+              (keydown.ctrl.enter)="saveEditComment(c)"></textarea>
+            <div class="ci-actions">
+              <button class="ci-action-btn edit" (click)="saveEditComment(c)">&#10003; Sauvegarder</button>
+              <button class="ci-action-btn delete" (click)="cancelEditComment()">Annuler</button>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
